@@ -1,0 +1,33 @@
+body {
+    background-color: rgb(61, 61, 61);
+  }
+
+  table,
+  tr,
+  td {
+    border: 1px solid black;
+    left: 10%;
+    top: 10%;
+    
+  }
+
+  td {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background-color: white;
+  }
+
+  table {
+    background-color: black;
+    position: absolute;
+
+  }
+  .button{
+    position: absolute;
+
+  }
+  div.dis{
+    pointer-events: none;
+  }
+  

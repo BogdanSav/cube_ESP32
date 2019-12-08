@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+
+
+  <title>CUBE Controls</title>
+  <link rel="stylesheet" href="arrow.css">
+  <link rel="stylesheet" href="main.css">
+</head>
+
+<body>
+
+  <button id="matr">1</button>
+  <button id="motor">2</button>
+  <div class="matrix" id="m1">
+    <div class="button" id="but"></div>
+    <div id="table"></div>
+  </div>
+
+  <div class="motors" id="m2">
+
+    <div class="arrow arrow-foward" id="fow"></div>
+
+    <div class="arrow arrow-backward" id="back"></div>
+    <div class="arrow arrow-left" id="left"></div>
+    <div class="arrow arrow-right" id="right"></div>
+
+  </div>
+  <!-- <hr id="horiz-center"> -->
+  <!-- <hr id="vert-center"> -->
+
+
+  <script>
+    var send = ""
+    var first
+    var second
+    var angle1 = false, angle2 = false, angle3 = false, angle4 = false
+    const fow = document.getElementById("fow")
+    const back = document.getElementById("back")
+    const left = document.getElementById("left")
+    const right = document.getElementById("right")
+    const matrix = document.getElementById("m1")
+    const motors = document.getElementById("m2")
+
+
+
+    document.getElementById("matr").onclick = () => {
+      motors.classList.add("dis")
+      matrix.classList.remove("dis")
+      document.onkeydown = (e) => { return }
+
+    }
+    document.getElementById("motor").onclick = () => {
+      matrix.classList.add("dis")
+      motors.classList.remove("dis")
+      fow.onmousedown = ()=>{
+        send = "fow"
+          console.log(send)
+          sendrequest(send)
+          
+      }
+      fow.onmouseup =()=>{
+        send = "stop"
+          console.log(send)
+          sendrequest(send)
+      }
+      back.onmousedown = ()=>{
+        send = "back"
+          console.log(send)
+          sendrequest(send)
+          
+      }
+      back.onmouseup =()=>{
+        send = "stop"
+          console.log(send)
+          sendrequest(send)
+      }
+      left.onmousedown = ()=>{
+        send = "left"
+          console.log(send)
+          sendrequest(send)
+          
+      }
+      left.onmouseup =()=>{
+        send = "stop"
+          console.log(send)
+          sendrequest(send)
+      }
+      right.onmousedown = ()=>{
+        send = "right"
+          console.log(send)
+          sendrequest(send)
+          
+      }
+      right.onmouseup =()=>{
+        send = "stop"
+          console.log(send)
+          sendrequest(send)
+      }
+
+
+      document.onkeydown = (e) => {
+        
+        if (e.keyCode == "38") {
+          fow.classList.add("arrow-foward1")
+          angle1 = true
+          send = "fow"
+          console.log(send)
+          sendrequest(send)
+
+        }
+        else if (e.keyCode == "40") {
+          back.classList.add("arrow-foward1")
+          angle2 = true
+          send = "back"
+          console.log(send)
+          sendrequest(send)
+        }
+
+        else if (e.keyCode == "37") {
+          left.classList.add("arrow-foward1")
+          angle3 = true
+          send = "left"
+          console.log(send)
+          sendrequest(send)
+        }
+
+        else if (e.keyCode == "39") {
+          right.classList.add("arrow-foward1")
+          angle4 = true
+          send = "right"
+          console.log(send)
+          sendrequest(send)
+        }
+        else {
+          
+          send = "stop"
+          console.log(send)
+          sendrequest(send)
+        }
+
+        
+
+        if (angle1 && angle4) {
+          console.log("fow-right")
+          send = "fow-right"
+          console.log(send)
+          sendrequest(send)
+
+        }
+        else if (angle1 && angle3) {
+          console.log("fow-left")
+          send = "fow-left"
+          console.log(send)
+          sendrequest(send)
+
+        }
+        // else if (angle2 && angle3) {
+        //   console.log("back-left")
+        //   send = "back-left"
+        //   console.log(send)
+        //   sendrequest(send)
+        // }
+        // else if (angle2 && angle4) {
+        //   console.log("back-right")
+        //   send = "back-right"
+        //   console.log(send)
+        //   sendrequest(send)
+
+        // }
+         else {
+          
+          send = "stop"
+          console.log(send)
+          sendrequest(send)
+        }
+
+
+      }
+    }
+
+
+    document.onkeyup = (e) => {
+      if (e.keyCode == "38") {
+        fow.classList.remove("arrow-foward1")
+        angle1 = false
+      }
+      else if (e.keyCode == "40") {
+        back.classList.remove("arrow-foward1")
+        angle2 = false
+      }
+      else if (e.keyCode == "37") {
+        left.classList.remove("arrow-foward1")
+        angle3 = false
+      }
+      else if (e.keyCode == "39") {
+        right.classList.remove("arrow-foward1")
+        angle4 = false
+      }
+      else { 
+        send = "stop"
+          console.log(send)
+          sendrequest(send)
+      }
+      if(!angle1&&!angle2&&!angle3&&!angle4){
+        send = "stop"
+          console.log(send)
+          sendrequest(send)
+      }
+
+    }
+    const but = document.createElement("button");
+    but.innerText = "Clean"
+    but.onclick = () => {
+      clearAll()
+      console.log(send)
+    }
+    document.getElementById("but").appendChild(but)
+
+    function clearAll() {
+      send = "clean"
+      for (let i = 0; i < 8; i++) {
+        for (let j = 0; j < 8; j++) {
+          const element = document.getElementById(`${i}_${j}`)
+          element.style.backgroundColor = 'white'
+
+        }
+      }
+      sendrequest(send)
+    }
+    const table = document.createElement('table')
+    const tbody = document.createElement('tbody')
+    for (let i = 0; i < 8; i++) {
+      const tr = document.createElement('tr')
+      for (let j = 0; j < 8; j++) {
+        const td = document.createElement('td')
+        td.className = 'red'
+        td.id = `${i}_${j}`
+        td.onclick = () => {
+          myFunction(td)
+        }
+        tr.appendChild(td)
+      }
+      tbody.appendChild(tr)
+    }
+    table.appendChild(tbody)
+    document.getElementById('table').appendChild(table)
+
+    function myFunction(obj) {
+      var arr = obj.id;
+      var splt = arr.split("_");
+      for (var i = 0; i < splt.length; i++) {
+        first = parseInt(splt[0]);
+        second = parseInt(splt[1]);
+
+      }
+
+      if (obj.style.background == "red") {
+        send = "clearone"
+        obj.style.background = "white";
+        console.log(send)
+        sendrequest(send)
+      }
+      else {
+        send = "sended"
+        obj.style.background = "red";
+        console.log(send)
+        sendrequest(send)
+
+      }
+    }
+    function sendrequest(sending) {
+
+      let reqest = new XMLHttpRequest()
+
+      reqest.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+          console.log("OK")
+        }
+      };
+      reqest.open("GET", "/" + sending + "?first=" + first + "&second=" + second, true)
+
+      reqest.send()
+    }
+    window.onbeforeunload = ()=>{
+      clearAll();
+    }
+  </script>
+
+</body>
+
+</html>
