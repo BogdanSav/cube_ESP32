@@ -24,10 +24,11 @@ body {
 
   }
   .button{
-    position: absolute;
+    display: inline;
 
   }
   div.dis{
     pointer-events: none;
   }
-  
+ 
+ 

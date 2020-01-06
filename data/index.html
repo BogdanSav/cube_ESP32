@@ -6,28 +6,211 @@
 
 
   <title>CUBE Controls</title>
-  <link rel="stylesheet" href="arrow.css">
-  <link rel="stylesheet" href="main.css">
+  <!-- <link rel="stylesheet" href="main.css">
+ <link rel="stylesheet" href="arrow.css"> -->
 </head>
+<style>
+  body {
+    background-color: rgb(61, 61, 61);
+  }
+
+  .content {
+
+    width: 100%;
+    height: 70%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+
+  }
+
+  .matrix {
+   
+    display: flex;
+    flex-direction: column;
+  }
+
+  .motors {
+    width: auto;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .matr_buttons {
+    display: flex;
+    justify-content: center;
+  }
+
+  table,
+  tr,
+  td {
+
+    border: 1px solid black;
+
+  }
+
+  td {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background-color: white;
+  }
+
+  table {
+    background-color: black;
+
+
+  }
+
+
+  div.dis {
+    pointer-events: none;
+  }
+
+  div.arrow-foward {
+    position: relative;
+    top: 20%;
+
+    transform: rotate(-45deg);
+  }
+
+  div.arrow-backward {
+
+    transform: rotate(135deg);
+  }
+
+  div.arrow-left {
+
+    transform: rotate(-135deg);
+  }
+
+  div.arrow-right {
+
+    transform: rotate(45deg);
+  }
+
+  /* 
+div.arrow-foward{
+	flex-grow: 1;
+	transform: rotate(-45deg);
+}
+div.arrow-backward{
+	flex-grow: 1;
+	transform: rotate(135deg);
+}
+div.arrow-left{
+	flex-grow: 1;
+	transform: rotate(-135deg);
+}
+div.arrow-right{
+	flex-grow: 1;
+	transform: rotate(45deg);
+} */
+
+  div.arrow {
+    width: 10vmin;
+    height: 10vmin;
+    /* flex-basis: 10vmin; */
+    /* box-sizing: border-box; */
+
+
+
+  }
+
+  div.arrow-foward::before,
+  div.arrow-backward::before,
+  div.arrow-left::before,
+  div.arrow-right::before {
+    content: '';
+    width: 100%;
+    height: 100%;
+    border-width: .8vmin .8vmin 0 0;
+    border-style: solid;
+    border-color: #fafafa;
+    transition: .2s ease;
+    display: block;
+    transform-origin: 100% 0;
+
+  }
+
+  div.arrow-foward::after,
+  div.arrow-backward::after,
+  div.arrow-left::after,
+  div.arrow-right::after {
+    content: '';
+    float: left;
+    position: relative;
+    top: -100%;
+    width: 100%;
+    height: 100%;
+    border-width: 0 .8vmin 0 0;
+    border-style: solid;
+    border-color: #fafafa;
+    transform-origin: 100% 0;
+    transition: .2s ease;
+  }
+
+  div.arrow-foward:active::after,
+  div.arrow-backward:active::after,
+  div.arrow-left:active::after,
+  div.arrow-right:active::after {
+    /* transform: rotate(45deg); */
+    border-color: orange;
+    /* height: 120%; */
+    transform: scale(1.5);
+  }
+
+  div.arrow-foward:active::before,
+  div.arrow-backward:active::before,
+  div.arrow-left:active::before,
+  div.arrow-right:active::before {
+    border-color: orange;
+    transform: scale(1.5);
+  }
+
+  div.arrow-foward1::after {
+    /* transform: rotate(45deg); */
+    border-color: orange;
+    /* height: 120%; */
+    transform: scale(1.5);
+  }
+
+  div.arrow-foward1::before {
+    border-color: orange;
+    transform: scale(1.5);
+  }
+</style>
 
 <body>
 
-  <button id="matr">1</button>
-  <button id="motor">2</button>
-  <div class="matrix" id="m1">
-    <div class="button" id="but"></div>
-    <div id="table"></div>
+
+
+  <div class="content">
+    <div class="matrix" id="m1">
+      <div class="table_" id="table"></div>
+      <div class="matr_buttons">
+        <button id="matr">Matrix control</button>
+        <div class="button" id="but"></div>
+      </div>
+
+    </div>
+
+    <div class="motors" id="m2">
+      <div class="arrow_container">
+        <div class="arrow arrow-foward" id="fow"></div>
+        <div class="arrow arrow-backward" id="back"></div>
+        <div class="arrow arrow-left" id="left"></div>
+        <div class="arrow arrow-right" id="right"></div>
+      </div>
+
+      <div>
+        <button id="motor">Motor control</button>
+      </div>
+
+    </div>
   </div>
 
-  <div class="motors" id="m2">
-
-    <div class="arrow arrow-foward" id="fow"></div>
-
-    <div class="arrow arrow-backward" id="back"></div>
-    <div class="arrow arrow-left" id="left"></div>
-    <div class="arrow arrow-right" id="right"></div>
-
-  </div>
   <!-- <hr id="horiz-center"> -->
   <!-- <hr id="vert-center"> -->
 
@@ -47,62 +230,62 @@
 
 
     document.getElementById("matr").onclick = () => {
-      motors.classList.add("dis")
-      matrix.classList.remove("dis")
+      arrow_container.classList.add("dis")
+      table_.classList.remove("dis")
       document.onkeydown = (e) => { return }
 
     }
     document.getElementById("motor").onclick = () => {
-      matrix.classList.add("dis")
-      motors.classList.remove("dis")
-      fow.onmousedown = ()=>{
+      table_.classList.add("dis")
+      arrow_container.classList.remove("dis")
+      fow.onmousedown = () => {
         send = "fow"
-          console.log(send)
-          sendrequest(send)
-          
+        console.log(send)
+        sendrequest(send)
+
       }
-      fow.onmouseup =()=>{
+      fow.onmouseup = () => {
         send = "stop"
-          console.log(send)
-          sendrequest(send)
+        console.log(send)
+        sendrequest(send)
       }
-      back.onmousedown = ()=>{
+      back.onmousedown = () => {
         send = "back"
-          console.log(send)
-          sendrequest(send)
-          
+        console.log(send)
+        sendrequest(send)
+
       }
-      back.onmouseup =()=>{
+      back.onmouseup = () => {
         send = "stop"
-          console.log(send)
-          sendrequest(send)
+        console.log(send)
+        sendrequest(send)
       }
-      left.onmousedown = ()=>{
+      left.onmousedown = () => {
         send = "left"
-          console.log(send)
-          sendrequest(send)
-          
+        console.log(send)
+        sendrequest(send)
+
       }
-      left.onmouseup =()=>{
+      left.onmouseup = () => {
         send = "stop"
-          console.log(send)
-          sendrequest(send)
+        console.log(send)
+        sendrequest(send)
       }
-      right.onmousedown = ()=>{
+      right.onmousedown = () => {
         send = "right"
-          console.log(send)
-          sendrequest(send)
-          
+        console.log(send)
+        sendrequest(send)
+
       }
-      right.onmouseup =()=>{
+      right.onmouseup = () => {
         send = "stop"
-          console.log(send)
-          sendrequest(send)
+        console.log(send)
+        sendrequest(send)
       }
 
 
       document.onkeydown = (e) => {
-        
+
         if (e.keyCode == "38") {
           fow.classList.add("arrow-foward1")
           angle1 = true
@@ -135,13 +318,13 @@
           sendrequest(send)
         }
         else {
-          
+
           send = "stop"
           console.log(send)
           sendrequest(send)
         }
 
-        
+
 
         if (angle1 && angle4) {
           console.log("fow-right")
@@ -170,8 +353,8 @@
         //   sendrequest(send)
 
         // }
-         else {
-          
+        else {
+
           send = "stop"
           console.log(send)
           sendrequest(send)
@@ -199,15 +382,15 @@
         right.classList.remove("arrow-foward1")
         angle4 = false
       }
-      else { 
+      else {
         send = "stop"
-          console.log(send)
-          sendrequest(send)
+        console.log(send)
+        sendrequest(send)
       }
-      if(!angle1&&!angle2&&!angle3&&!angle4){
+      if (!angle1 && !angle2 && !angle3 && !angle4) {
         send = "stop"
-          console.log(send)
-          sendrequest(send)
+        console.log(send)
+        sendrequest(send)
       }
 
     }
@@ -284,7 +467,7 @@
 
       reqest.send()
     }
-    window.onbeforeunload = ()=>{
+    window.onbeforeunload = () => {
       clearAll();
     }
   </script>
