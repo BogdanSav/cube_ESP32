@@ -19,8 +19,9 @@
     width: 100%;
     height: 70%;
     display: flex;
-    justify-content: space-around;
+    position: relative;
     align-items: center;
+    justify-content: space-around;
 
   }
 
@@ -28,13 +29,15 @@
    
     display: flex;
     flex-direction: column;
+    align-items: center;
   }
 
   .motors {
-    width: auto;
-    height: auto;
+    width: 50%;
+    height: inherit;
     display: flex;
     flex-direction: column;
+    align-items: center;
   }
 
   .matr_buttons {
@@ -67,26 +70,38 @@
   div.dis {
     pointer-events: none;
   }
-
-  div.arrow-foward {
+  div.arrow_container{
+    width: 645px;
+    height: 692px;
     position: relative;
-    top: 20%;
-
+  
+  }
+  div.arrow-foward {
+    left: 43%;
+    top: 5%;
+    position: absolute; 
     transform: rotate(-45deg);
   }
 
   div.arrow-backward {
-
+    left: 43%;
+    top: 75%;
+    position: absolute;
     transform: rotate(135deg);
+    
   }
 
   div.arrow-left {
-
+    left: 5%;
+    top: 40%;
+    position: absolute;
     transform: rotate(-135deg);
   }
 
   div.arrow-right {
-
+    right: 5%;
+    top: 37%;
+    position: absolute;
     transform: rotate(45deg);
   }
 
@@ -197,7 +212,7 @@ div.arrow-right{
     </div>
 
     <div class="motors" id="m2">
-      <div class="arrow_container">
+      <div class="arrow_container" id="ac">
         <div class="arrow arrow-foward" id="fow"></div>
         <div class="arrow arrow-backward" id="back"></div>
         <div class="arrow arrow-left" id="left"></div>
@@ -226,7 +241,8 @@ div.arrow-right{
     const right = document.getElementById("right")
     const matrix = document.getElementById("m1")
     const motors = document.getElementById("m2")
-
+    const arrow_container =document.getElementById("ac")
+    const table_ =document.getElementById("table")
 
 
     document.getElementById("matr").onclick = () => {
