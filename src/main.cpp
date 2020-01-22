@@ -10,10 +10,10 @@
 //
 #define NUMBER_OF_DEVICES 1
 #define CS_PIN 27
-#define wheel_r_1 18
-#define wheel_r_2 19
-#define wheel_l_1 32
-#define wheel_l_2 33
+#define wheel_r_1 32
+#define wheel_r_2 33
+#define wheel_l_1 18
+#define wheel_l_2 19
 //
 //variables
 //
@@ -59,8 +59,8 @@ void setup() {
   tr.start();
   tl.start();
   ledMatrix.init();
-  ledMatrix.commit();
   ledMatrix.clear();
+  ledMatrix.commit();
   pinMode(wheel_l_1,OUTPUT);
   pinMode(wheel_l_2,OUTPUT);
   pinMode(wheel_r_1,OUTPUT);
