@@ -6,6 +6,7 @@
 #include<WebSocketsClient.h>
 #include<SocketIOclient.h>
 #include<cubeControl.h>
+#include<typeinfo>
 //defines
 //
 //
@@ -14,7 +15,11 @@
 int first;
 int second;
 const char* message;
-const char* ssid ="ChNU-WiFi-NET";
+
+float force=0;
+//const char* ssid ="ChNU-WiFi-NET"; 
+const char* ssid ="WR-Sydor5";
+const char* password="IRENA1978";
 //
 //classes
 //
@@ -30,7 +35,7 @@ void webSocketEvent(WStype_t type, uint8_t * payload, size_t length);
 
 void setup() {
   Serial.begin(115200);
-  WiFi.begin(ssid);
+  WiFi.begin(ssid,password);
   while (WiFi.status() != WL_CONNECTED) {
         delay(500);
         Serial.print(".");
@@ -40,12 +45,13 @@ void setup() {
     Serial.println("WiFi connected");
     Serial.println("IP address: ");
     Serial.println(WiFi.localIP());
- 
+  
   cb.init();
  
  
   
-   web_sockets.beginSSL("robo-dot.akit.pp.ua", 8999,"/");
+  web_sockets.beginSSL("robo-dot.akit.pp.ua", 8999,"/");
+	//web_sockets.begin("robo-dot.akit.pp.ua",8999,"/");
     web_sockets.onEvent(webSocketEvent);
     web_sockets.setReconnectInterval(5000);
 
@@ -59,23 +65,43 @@ void loop() {
 	DeserializationError root = deserializeJson(doc,message);
 
 	//Serial.println(root.c_str());
-  float angle = doc["angle"]["degree"];
-  float force = doc["force"];
-Serial.println(angle);
-Serial.println(force);
+
+ 
+	force = doc["force"];
+ 	float angle =float(doc["angle"]["degree"]);
+//   const char* event = doc["event"];
+//   Serial.println(event);
+	
+  
+// Serial.println(typeid(angle).name());
+//Serial.println(force);
   if(force>=0.5){
-    if(45.0<angle<135){
-      cb.moveFoward();
-    }
-    else if(135<angle<225){
-      cb.moveLeft();
-    }
-    else if(225<angle<315){
-      cb.moveBackward();
-    }
-    else if(angle<45&&315<angle){
-      cb.moveRight();
-    }
+	  if((angle>=45.0)&&(angle<=135.0)){
+		 cb.moveFoward();
+		//  Serial.println("FOw"); 
+	  }
+	  else if ((angle>=135.0)&&(angle<=225.0))
+	  {
+		  cb.moveLeft();
+		//   Serial.println("left");
+	  }
+	  else if ((angle>=225.0)&&(angle<=315.0))
+	  {
+		  cb.moveBackward();
+		//   Serial.println("Back");
+	  }
+	  else if ((angle>=315.0)||(angle<=45.0))
+	  {
+		  cb.moveRight();
+		//   Serial.println("right");
+	  }
+	 
+	  
+	
+  }
+  else{
+	  	cb.stop();
+		// Serial.println("Stop");
   }
  
   web_sockets.loop();
@@ -103,10 +129,10 @@ void webSocketEvent(WStype_t type, uint8_t * payload, size_t length) {
 			Serial.printf("[WSc] Connected to url: %s\n", payload);
 
 			// send message to server when Connected
-			web_sockets.sendTXT("Connected");
+			//  web_sockets.sendTXT("{\"event\":\"cube_connect_request\",\"data\":\"cube3\"}");
 			break;
 		case WStype_TEXT:
-		//	Serial.printf("[WSc] get text: %s\n", payload);
+			// Serial.printf("[WSc] get text: %s\n", payload);
 			message = (char*)payload;
 			// send message to server
 			// web_sockets.sendTXT("message here");
