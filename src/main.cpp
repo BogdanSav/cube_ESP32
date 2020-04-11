@@ -8,6 +8,7 @@
 #include <SocketIOclient.h>
 #include <cubeControl.h>
 #include <string>
+
 //defines
 //
 //
@@ -19,13 +20,14 @@ const char *message;
 float force = 0;
 bool connection_type = false;
 const double pi = 3.14159;
-
 //
 //classes
 //
+
 WebSocketsClient web_sockets;
 cubeControl cb;
 WiFiMulti mwifi;
+
 //
 //functions
 //
@@ -79,12 +81,9 @@ void loop()
 	String event = doc["event"];
 	force = doc["data"]["force"];
 	float angle = float(doc["data"]["angle"]);
-	int id = doc["data"]["id"];
+	int x = doc["data"]["x"];
+	int y = doc["data"]["y"];
 	String state = doc["data"]["state"];
-
-	// Serial.print("event:");
-	// Serial.print(event);
-	// delay(1000);
 
 	if (event == "move_response")
 	{
@@ -117,19 +116,14 @@ void loop()
 			// Serial.println("Stop");
 		}
 	}
-	else if (event == "set_pixel_response")
-	{
-		if (state == "true")
-		{
-			cb.secSetPixel(id);
-			// Serial.print(id);
-		}
+	if (event == "set_pixel_response")
+	{  if(state="true")
+		cb.setPixel(x, y);
 	}
-	else if (event="clear_matrix_response"){
+	if (event = "clear_matrix_response")
+	{
 		cb.clearPixel();
 	}
-
-	
 
 	web_sockets.loop();
 }
