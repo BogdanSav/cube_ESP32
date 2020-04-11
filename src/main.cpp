@@ -25,7 +25,7 @@ const double pi = 3.14159;
 //
 
 WebSocketsClient web_sockets;
-cubeControl cb;
+cubeControl cube;
 WiFiMulti mwifi;
 
 //
@@ -61,7 +61,7 @@ void setup()
 	Serial.println("IP address: ");
 	Serial.println(WiFi.localIP());
 
-	cb.init();
+	cube.init();
 
 	if (connection_type)
 	{
@@ -91,38 +91,47 @@ void loop()
 		{
 			if ((angle >= -2.295) && (angle <= -0.765))
 			{
-				cb.moveFoward();
+				cube.moveFoward();
 				Serial.println("FOw");
 			}
 			else if ((angle >= 2.295) || (angle <= -2.295))
 			{
-				cb.moveLeft();
+				cube.moveLeft();
 				Serial.println("left");
 			}
 			else if ((angle >= 0.765) && (angle <= 2.295))
 			{
-				cb.moveBackward();
+				cube.moveBackward();
 				Serial.println("Back");
 			}
 			else if ((angle >= -0.765) || (angle <= 0.765))
 			{
-				cb.moveRight();
+				cube.moveRight();
 				Serial.println("right");
 			}
 		}
 		else
 		{
-			cb.stop();
+			cube.stop();
 			// Serial.println("Stop");
 		}
 	}
 	if (event == "set_pixel_response")
-	{  if(state="true")
-		cb.setPixel(x, y);
-	}
-	if (event = "clear_matrix_response")
 	{
-		cb.clearPixel();
+		if (state = "true")
+		{
+
+			cube.setPixel(x, y);
+		}
+		else if (state = "false")
+		{
+
+			cube.clearOnePixel(x, y);
+		}
+	}
+	if (event == "clear_matrix_response" || event == "user_cube_break_conn_response")
+	{
+		cube.clearPixel();
 	}
 
 	web_sockets.loop();
