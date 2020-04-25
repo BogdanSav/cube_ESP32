@@ -10,14 +10,13 @@
 #include <string>
 
 //defines
-//
+//s
 //
 //variables
 //
 int first;
 int second;
 const char *message;
-float force = 0;
 bool connection_type = false;
 const double pi = 3.14159;
 //
@@ -79,54 +78,42 @@ void loop()
 	StaticJsonDocument<2048> doc;
 	DeserializationError root = deserializeJson(doc, message);
 	String event = doc["event"];
-	force = doc["data"]["force"];
-	float angle = float(doc["data"]["angle"]);
+	String direction = doc["data"]["command"];
 	int x = doc["data"]["x"];
 	int y = doc["data"]["y"];
 	String state = doc["data"]["state"];
 
 	if (event == "move_response")
 	{
-		if (force >= 0.5)
+		if (direction=="moveFront")
 		{
-			if ((angle >= -2.295) && (angle <= -0.765))
-			{
-				cube.moveFoward();
-				Serial.println("FOw");
-			}
-			else if ((angle >= 2.295) || (angle <= -2.295))
-			{
-				cube.moveLeft();
-				Serial.println("left");
-			}
-			else if ((angle >= 0.765) && (angle <= 2.295))
-			{
-				cube.moveBackward();
-				Serial.println("Back");
-			}
-			else if ((angle >= -0.765) || (angle <= 0.765))
-			{
-				cube.moveRight();
-				Serial.println("right");
-			}
+			cube.moveFoward();
 		}
-		else
+		else if(direction=="moveBack")
 		{
-			cube.stop();
-			// Serial.println("Stop");
+			cube.moveBackward();
 		}
+		else if (direction=="turnLeft")
+		{
+			cube.moveLeft();
+		}
+		else if(direction=="turnRight")
+		{
+			cube.moveRight();
+		}
+		else cube.stop();
 	}
 	if (event == "set_pixel_response")
 	{
-		if (state = "true")
+		if (state == "true")
 		{
 
-			cube.setPixel(x, y);
+			cube.setPixel(y, x);
 		}
-		else if (state = "false")
+		else if (state == "false")
 		{
 
-			cube.clearOnePixel(x, y);
+			cube.clearOnePixel(y, x);
 		}
 	}
 	if (event == "clear_matrix_response" || event == "user_cube_break_conn_response")
