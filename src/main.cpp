@@ -9,8 +9,6 @@
 #include <cubeControl.h>
 #include <string>
 
-//defines
-//s
 //
 //variables
 //
