@@ -127,7 +127,7 @@ void loop()
 		{
 			cube.clearPixel();
 		}
-		if()
+		
 	}
 	web_sockets.loop();
 }
