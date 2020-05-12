@@ -1,7 +1,6 @@
 #include <Arduino.h>
 #include <WiFi.h>
 #include <WiFiMulti.h>
-
 #include <Ticker.h>
 #include <ArduinoJson.h>
 #include <WebSocketsClient.h>
@@ -17,6 +16,7 @@ int second;
 const char *message;
 bool connection_type = false;
 const double pi = 3.14159;
+String cubeId = "cube16";
 //
 //classes
 //
@@ -59,6 +59,7 @@ void setup()
 	Serial.println(WiFi.localIP());
 
 	cube.init();
+	cube.sensorsInit();
 
 	if (connection_type)
 	{
@@ -77,48 +78,57 @@ void loop()
 	DeserializationError root = deserializeJson(doc, message);
 	String event = doc["event"];
 	String direction = doc["data"]["command"];
+	String id = doc["data"]["cubeId"];
 	int x = doc["data"]["x"];
 	int y = doc["data"]["y"];
 	String state = doc["data"]["state"];
 
-	if (event == "move_response")
+	if (id == "cube16")
 	{
-		if (direction=="moveFront")
+		if (event == "move_response")
 		{
-			cube.moveFoward();
+			if (direction == "moveFront")
+			{
+				cube.moveFoward();
+			}
+			else if (direction == "moveBack")
+			{
+				cube.moveBackward();
+			}
+			else if (direction == "turnLeft")
+			{
+				cube.moveLeft();
+			}
+			else if (direction == "turnRight")
+			{
+				cube.moveRight();
+			}
+			else
+				cube.stop();
+			if(cube.hc_sr04() <=8 && direction=="moveFront")
+			{
+				cube.stop();
+			}
 		}
-		else if(direction=="moveBack")
+		if (event == "set_pixel_response")
 		{
-			cube.moveBackward();
-		}
-		else if (direction=="turnLeft")
-		{
-			cube.moveLeft();
-		}
-		else if(direction=="turnRight")
-		{
-			cube.moveRight();
-		}
-		else cube.stop();
-	}
-	if (event == "set_pixel_response")
-	{
-		if (state == "true")
-		{
+			if (state == "true")
+			{
 
-			cube.setPixel(y, x);
+				cube.setPixel(y, x);
+			}
+			else if (state == "false")
+			{
+
+				cube.clearOnePixel(y, x);
+			}
 		}
-		else if (state == "false")
+		if (event == "clear_matrix_response" || event == "user_cube_break_conn_response")
 		{
-
-			cube.clearOnePixel(y, x);
+			cube.clearPixel();
 		}
+		if()
 	}
-	if (event == "clear_matrix_response" || event == "user_cube_break_conn_response")
-	{
-		cube.clearPixel();
-	}
-
 	web_sockets.loop();
 }
 void hexdump(const void *mem, uint32_t len, uint8_t cols = 16)
@@ -146,7 +156,7 @@ void webSocketEvent(WStype_t type, uint8_t *payload, size_t length)
 		break;
 	case WStype_CONNECTED:
 		Serial.printf("[WSc] Connected to url: %s\n", payload);
-		web_sockets.sendTXT("{\"event\":\"cube_connect_request\",\"data\": \"N1X1AKVM2UhZNLHuaIF2oA==\"}");
+		web_sockets.sendTXT("{\"event\":\"cube_connect_request\",\"data\": \""+cubeId+"\"}");
 		// send message to server when Connected
 		//  web_sockets.sendTXT("{\"event\":\"cube_connect_request\",\"data\":\"cube3\"}");
 		break;
