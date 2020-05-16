@@ -83,7 +83,7 @@ void loop()
 	int y = doc["data"]["y"];
 	String state = doc["data"]["state"];
 
-	if (id == "cube16")
+	if (id == cubeId)
 	{
 		if (event == "move_response")
 		{
@@ -107,6 +107,7 @@ void loop()
 				cube.stop();
 			if(cube.hc_sr04() <=8 && direction=="moveFront")
 			{
+				
 				cube.stop();
 			}
 		}
