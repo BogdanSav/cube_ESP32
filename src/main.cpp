@@ -16,7 +16,7 @@ int second;
 const char *message;
 bool connection_type = false;
 const double pi = 3.14159;
-String cubeId = "cube16";
+String cubeId = "cube17";
 //
 //classes
 //
@@ -59,7 +59,7 @@ void setup()
 	Serial.println(WiFi.localIP());
 
 	cube.init();
-	cube.sensorsInit();
+	// cube.sensorsInit();
 
 	if (connection_type)
 	{
@@ -105,11 +105,11 @@ void loop()
 			}
 			else
 				cube.stop();
-			if(cube.hc_sr04() <=8 && direction=="moveFront")
-			{
+			// if(cube.hc_sr04() <=8 && direction=="moveFront")
+			// {
 				
-				cube.stop();
-			}
+			// 	cube.stop();
+			// }
 		}
 		if (event == "set_pixel_response")
 		{
